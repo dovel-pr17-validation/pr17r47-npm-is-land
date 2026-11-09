@@ -1,0 +1,52 @@
+{
+  "name": "@11ty/is-land",
+  "version": "5.3.0",
+  "description": "A framework independent partial hydration islands architecture implementation.",
+  "type": "module",
+  "main": "is-land.js",
+  "scripts": {
+    "compress": "terser is-land.js -o dist/is-land.min.js --compress --mangle --module --ecma 2016 && brotli-size dist/is-land.min.js",
+    "prepublishOnly": "npm run compress",
+    "start": "npx @11ty/eleventy --config=eleventy.cjs --serve",
+    "build": "npx @11ty/eleventy --config=eleventy.cjs",
+    "test": "vitest run"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/11ty/is-land.git"
+  },
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "funding": {
+    "type": "opencollective",
+    "url": "https://opencollective.com/11ty"
+  },
+  "bugs": {
+    "url": "https://github.com/11ty/is-land/issues"
+  },
+  "author": {
+    "name": "Zach Leatherman",
+    "email": "zachleatherman@gmail.com",
+    "url": "https://zachleat.com/"
+  },
+  "homepage": "https://github.com/11ty/is-land#readme",
+  "devDependencies": {
+    "@11ty/eleventy": "^3.1.8",
+    "@babel/core": "^7.29.7",
+    "@vitest/browser-playwright": "^5.1.0",
+    "babel-preset-solid": "^1.9.16",
+    "brotli-size-cli": "^1.0.0",
+    "esm-import-transformer": "^3.0.5",
+    "htm": "^3.1.1",
+    "playwright": "^1.64.1",
+    "preact": "^11.1.1",
+    "preact-render-to-string": "^6.8.2",
+    "solid-js": "^1.9.18",
+    "svelte": "^5.57.3",
+    "terser": "^5.51.2",
+    "vitest": "^5.1.0",
+    "vue": "^3.5.44"
+  }
+}

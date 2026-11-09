@@ -1,0 +1,82 @@
+---
+layout: layout.html
+title: Islands with Import Maps
+---
+<h1><a href="/">is-land</a> for image loading</h1>
+
+<style>
+img[is-land--img-skeleton] {
+	background-color: #eee;
+}
+</style>
+<script type="module">
+Island.addFallback("[data-island-img-skeleton]", function(node, prefix) {
+	let attr = prefix + "img-skeleton";
+	let template = node;
+	if(node.tagName === "NOSCRIPT") {
+		template = document.createElement("template");
+		template.innerHTML = node.innerText;
+	}
+	if(template.tagName !== "TEMPLATE") {
+		throw new Error("[data-island-img-skeleton] expects a <noscript> for No-JS images or a <template> for JS-only images.");
+	}
+	let templateContent = template.content;
+
+	let images = templateContent.querySelectorAll("img");
+	for(let img of images) {
+		// remove
+		img.setAttribute(attr, img.getAttribute("src"));
+		img.setAttribute("src", `data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg"/>`);
+	}
+
+	node.replaceWith(templateContent);
+
+	return () => {
+		for(let img of images) {
+			// restore
+			img.setAttribute("src", img.getAttribute(attr));
+			img.removeAttribute(attr);
+		}
+	};
+});
+</script>
+
+<h4>Experimental: pass in a CSS selector to progressively enhance other elements (<code>fallback</code>)</h4>
+
+<p>This example uses <code>on:interaction</code>. You will need to interact with the island for the images to load. Note the aspect ratio before/after is preserved via the width/height attributes on the img.</p>
+
+<p>Uses <code>&lt;noscript&gt;</code> for No-JS friendly images.</p>
+
+<is-land on:interaction>
+	<form>
+		<button type="button">Hydrate the island</button>
+	</form>
+
+	<noscript data-island-img-skeleton>
+		<img src="lib/logo-bg.svg" loading="lazy" width="200" height="200">
+		<img src="lib/logo-bg.svg" loading="lazy" width="200" height="200">
+		<img src="lib/logo-bg.svg" loading="lazy" width="200" height="200">
+		<img src="lib/logo-bg.svg" loading="lazy" width="200" height="200">
+		<img src="lib/logo-bg.svg" loading="lazy" width="200" height="200">
+		<img src="lib/logo-bg.svg" loading="lazy" width="200" height="200">
+		<img src="lib/logo-bg.svg" loading="lazy" width="200" height="200">
+	</noscript>
+</is-land>
+
+<p>Uses <code>&lt;template&gt;</code> for JS-only images.</p>
+
+<is-land on:interaction>
+	<form>
+		<button type="button">Hydrate the island</button>
+	</form>
+
+	<template data-island-img-skeleton>
+		<img src="lib/logo-bg.svg" loading="lazy" width="200" height="200">
+		<img src="lib/logo-bg.svg" loading="lazy" width="200" height="200">
+		<img src="lib/logo-bg.svg" loading="lazy" width="200" height="200">
+		<img src="lib/logo-bg.svg" loading="lazy" width="200" height="200">
+		<img src="lib/logo-bg.svg" loading="lazy" width="200" height="200">
+		<img src="lib/logo-bg.svg" loading="lazy" width="200" height="200">
+		<img src="lib/logo-bg.svg" loading="lazy" width="200" height="200">
+	</template>
+</is-land>

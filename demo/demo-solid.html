@@ -1,0 +1,77 @@
+---
+layout: layout.html
+title: SolidJS Islands
+showImportMaps: true
+---
+<h1><a href="/">is-land</a> using SolidJS</h1>
+
+{% include "import-map-warning.liquid" %}
+
+<h2>Scroll down</h2>
+
+<hr style="height: 100vh">
+
+<h2>Client-rendered SolidJS</h2>
+
+<p>Example from <a href="https://www.solidjs.com/guides/getting-started#buildless-options"><code>https://www.solidjs.com/guides/getting-started#buildless-options</code></a></p>
+
+<h2>Client-rendered SolidJS</h2>
+
+<p>You can use `import="./solid-component.js"` or `&lt;template data-island&gt; with &lt;script type="module"&gt;`:</p>
+
+<is-land on:visible import="./lib/solid/solid-component-client.js">
+	This is a solid component:
+	<solid-component-client class="demo-component" name="SolidJS">Fallback content!</solid-web-component>
+</is-land>
+
+<is-land on:visible id="solid-test">
+	This is a solid component: <solid-other-web-component class="demo-component" name="SolidJS">Fallback content!</solid-other-web-component>
+
+	<template data-island>
+		<script type="module">
+		import { createSignal } from "solid-js";
+		import html from "solid-js/html";
+		import { customElement } from "solid-element";
+
+		customElement('solid-other-web-component', { name: undefined },
+
+		  (props, { element }) => {
+			element.classList.add("test-c-finish");
+			const [count, setCount] = createSignal(0);
+			return html`
+		<style>
+		p { color: blue; margin: 0 }
+		</style>
+		<p>Hello, ${() => props.name || "Stranger"}!</p>
+		<div>
+		<button onclick=${() => setCount(count() + 1)} >Increment</button>
+		Counter: ${count}
+		</div>
+		`;
+		  });
+		</script>
+	</template>
+</is-land>
+
+
+<h2>Server-rendered SolidJS (SSR)</h2>
+
+<p>SSR requires server-side integration, in this case provided by Eleventy compiling JSX with <code>babel-preset-solid</code>.</p>
+
+{% assign componentHtmlOnly = "./lib/solid/solid-component.jsx" | solid: "html-only" %}
+{% assign component = "./lib/solid/solid-component.jsx" | solid: "hydrated" %}
+
+<h3>No hydration, HTML only</h3>
+
+<p>Without hydration, the island is unnecessary.</p>
+
+<div class="demo-component">{{ componentHtmlOnly.html }}</div>
+
+<h3>With Hydration</h3>
+
+<!-- Solid’s hydration runtime must be on the page before any island hydrates -->
+{{ component.hydrationScript }}
+
+<is-land on:visible type="solid-ssr" import="{{ component.clientJsUrl }}" data-render-id="hydrated" class="demo-component">{{ component.html }}</is-land>
+
+<p>Related: <a href="https://github.com/solidjs/solid/issues/1984">https://github.com/solidjs/solid/issues/1984</a> <a href="https://github.com/11ty/is-land/issues/43">https://github.com/11ty/is-land/issues/43</a></p>

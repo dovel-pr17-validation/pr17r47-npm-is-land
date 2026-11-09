@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="description" content="">
+		<title>{{ title }}</title>
+		<link rel="stylesheet" href="/demo-styles.css">
+
+{% if showImportMaps %}
+		<!-- via https://generator.jspm.io/ -->
+		<script type="importmap">
+		{
+			"imports": {
+				"svelte": "https://unpkg.com/svelte@5.19.10/src/index-client.js",
+				"svelte/internal/client": "https://unpkg.com/svelte@5.19.10/src/internal/client/index.js",
+				"svelte/internal/flags/legacy": "https://unpkg.com/svelte@5.19.10/src/internal/flags/legacy.js",
+
+				"lit": "https://unpkg.com/lit@3.2.1/index.js",
+
+				"solid-element": "https://unpkg.com/solid-element@1.9.1/dist/index.js",
+				"solid-js": "https://unpkg.com/solid-js@1.9.17/dist/solid.js",
+				"solid-js/web": "https://unpkg.com/solid-js@1.9.17/web/dist/web.js",
+				"solid-js/html": "https://unpkg.com/solid-js@1.9.17/html/dist/html.js"
+			},
+			"scopes": {
+				"https://unpkg.com/": {
+					"clsx": "https://unpkg.com/clsx@2.1.1/dist/clsx.mjs",
+					"esm-env": "https://unpkg.com/esm-env@1.2.2/index.js",
+					"esm-env/browser": "https://unpkg.com/esm-env@1.2.2/true.js",
+					"esm-env/development": "https://unpkg.com/esm-env@1.2.2/false.js",
+					"esm-env/node": "https://unpkg.com/esm-env@1.2.2/false.js",
+
+					"@lit/reactive-element": "https://unpkg.com/@lit/reactive-element@2.0.4/reactive-element.js",
+					"lit-element/lit-element.js": "https://unpkg.com/lit-element@4.1.1/lit-element.js",
+					"lit-html": "https://unpkg.com/lit-html@3.2.1/lit-html.js",
+					"lit-html/is-server.js": "https://unpkg.com/lit-html@3.2.1/is-server.js",
+
+					"component-register": "https://unpkg.com/component-register@0.8.7/dist/component-register.js"
+				}
+			}
+		}
+		</script>
+{% endif %}
+
+{% if showPageCss %}
+		<style>
+		{{ page.url | getSvelteCss }}
+		</style>
+{% endif %}
+
+
+		<!-- Script tag method: -->
+		<!--
+		<script type="module" src="/is-land.js"></script>
+
+		-->
+
+		<!-- Import method: -->
+		<script type="module">
+		import { Island } from "/is-land.js";
+		</script>
+
+		<!-- Sample JavaScript framework init code -->
+		<script type="module" src="/lib/demo-inittype.js"></script>
+
+		<!--
+		You can directly import dependencies (for eager loading)
+		or for lazy loaded islands put dependencies into `import="./lib/vanilla-web-component.js"`
+		Look inside this file for a commented-out example of using this programmatically in your component code
+		-->
+		<script type="module" src="/lib/vanilla-web-component.js"></script>
+
+	</head>
+	<body>
+		{% include "demo-nav.html" %}
+		<main id="demo">
+		{{ content }}
+		</main>
+	</body>
+</html>
